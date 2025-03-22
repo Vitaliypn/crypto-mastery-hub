@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -65,6 +66,38 @@ const LessonPage = () => {
       </div>
     );
   }
+  
+  // Find previous and next lessons
+  const allLessons: { moduleId: number; lesson: typeof currentLesson }[] = [];
+  
+  // Flatten all lessons from all modules with their moduleId
+  course.modules.forEach(module => {
+    module.lessons.forEach(lesson => {
+      allLessons.push({ moduleId: module.id, lesson });
+    });
+  });
+  
+  // Sort lessons by moduleId and then by lesson id
+  allLessons.sort((a, b) => {
+    if (a.moduleId !== b.moduleId) {
+      return a.moduleId - b.moduleId;
+    }
+    return a.lesson.id - b.lesson.id;
+  });
+  
+  // Find the current lesson index
+  const currentLessonIndex = allLessons.findIndex(
+    item => item.lesson.id === currentLesson.id
+  );
+  
+  // Define previous and next lessons
+  const prevLesson = currentLessonIndex > 0 
+    ? allLessons[currentLessonIndex - 1].lesson 
+    : null;
+    
+  const nextLesson = currentLessonIndex < allLessons.length - 1 
+    ? allLessons[currentLessonIndex + 1].lesson 
+    : null;
   
   const getYouTubeVideoId = (url: string | undefined) => {
     if (!url) return null;
