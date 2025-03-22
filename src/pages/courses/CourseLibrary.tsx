@@ -8,78 +8,15 @@ import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import AppFooter from '@/components/AppFooter';
 import PageHeader from '@/components/PageHeader';
+import courseData from '@/data/courseData';
 
 const CourseLibrary = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('all');
   
-  // Mock course data
-  const courses = [
-    {
-      id: 1,
-      title: 'Crypto Basics',
-      instructor: 'Sarah Johnson',
-      rating: 5.0,
-      reviews: 124,
-      lessons: 8,
-      duration: '2h 45m',
-      level: 'beginner',
-      icon: '₿',
-      description: 'Learn the fundamentals of cryptocurrency and blockchain technology'
-    },
-    {
-      id: 2,
-      title: 'Blockchain 101',
-      instructor: 'Mark Williams',
-      rating: 4.8,
-      reviews: 95,
-      lessons: 10,
-      duration: '3h 20m',
-      level: 'beginner',
-      icon: '🧱',
-      description: 'Understanding blockchain technology and its applications'
-    },
-    {
-      id: 3,
-      title: 'Trading Strategies',
-      instructor: 'Alex Chen',
-      rating: 4.7,
-      reviews: 78,
-      lessons: 12,
-      duration: '4h 10m',
-      level: 'intermediate',
-      icon: '📈',
-      description: 'Advanced patterns and techniques for crypto trading'
-    },
-    {
-      id: 4,
-      title: 'DeFi Fundamentals',
-      instructor: 'Jen Kumar',
-      rating: 4.9,
-      reviews: 62,
-      lessons: 9,
-      duration: '3h 15m',
-      level: 'intermediate',
-      icon: '🏦',
-      description: 'Learn about decentralized finance protocols and applications'
-    },
-    {
-      id: 5,
-      title: 'Advanced Trading',
-      instructor: 'Thomas Lee',
-      rating: 4.6,
-      reviews: 43,
-      lessons: 15,
-      duration: '5h 30m',
-      level: 'advanced',
-      icon: '📊',
-      description: 'Master complex crypto trading strategies for professionals'
-    }
-  ];
-  
   // Filter courses based on search query and level
-  const filteredCourses = courses.filter(course => {
+  const filteredCourses = courseData.filter(course => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           course.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesLevel = selectedLevel === 'all' || course.level === selectedLevel;
@@ -194,9 +131,16 @@ const CourseLibrary = () => {
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-gray-400">{course.lessons} lessons</span>
+                        <span className="text-[10px] text-gray-400">
+                          {course.modules.flatMap(m => m.lessons).length} lessons
+                        </span>
                         <span className="text-[10px] text-gray-400">•</span>
-                        <span className="text-[10px] text-gray-400">{course.duration}</span>
+                        <span className="text-[10px] text-gray-400">
+                          {Math.round(course.modules.flatMap(m => m.lessons).reduce((acc, lesson) => {
+                            const [mins, secs] = lesson.duration.split(':').map(Number);
+                            return acc + mins + secs / 60;
+                          }, 0))} mins
+                        </span>
                       </div>
                     </div>
                   </div>

@@ -16,55 +16,31 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import BackButtonHeader from '@/components/BackButtonHeader';
 import AppFooter from '@/components/AppFooter';
+import CourseModuleOverview from '@/components/CourseModuleOverview';
+import courseData from '@/data/courseData';
 
 const CourseDetails = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   
-  // Mock course data (in a real app, you'd fetch this based on courseId)
-  const course = {
-    id: Number(courseId),
-    title: 'Crypto Basics',
-    instructor: 'Sarah Johnson',
-    instructorRole: 'Senior Crypto Analyst',
-    instructorAvatar: 'https://i.pravatar.cc/100?img=5',
-    rating: 5.0,
-    reviews: 124,
-    students: 1250,
-    lessons: 8,
-    duration: '2h 45m',
-    level: 'Beginner',
-    progress: 25,
-    description: 'Learn the fundamentals of cryptocurrency and blockchain technology. This course covers everything from the basics of blockchain to setting up your first wallet and making transactions.',
-    modules: [
-      {
-        id: 1,
-        title: 'Introduction to Cryptocurrency',
-        lessons: [
-          { id: 101, title: 'What is Cryptocurrency?', duration: '12:20', completed: true },
-          { id: 102, title: 'History of Bitcoin', duration: '15:45', completed: true },
-          { id: 103, title: 'How Blockchain Works', duration: '18:30', completed: false },
-        ]
-      },
-      {
-        id: 2,
-        title: 'Getting Started with Crypto',
-        lessons: [
-          { id: 201, title: 'Setting Up Your First Wallet', duration: '14:15', completed: false },
-          { id: 202, title: 'Securing Your Investments', duration: '16:40', completed: false },
-          { id: 203, title: 'Making Your First Purchase', duration: '20:10', completed: false },
-        ]
-      },
-      {
-        id: 3,
-        title: 'Understanding the Market',
-        lessons: [
-          { id: 301, title: 'Market Capitalization', duration: '13:50', completed: false },
-          { id: 302, title: 'Reading Price Charts', duration: '22:30', completed: false },
-        ]
-      }
-    ]
-  };
+  // Find the course from our course data
+  const course = courseData.find(c => c.id === Number(courseId));
+  
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-fin-dark text-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-2">Course Not Found</h2>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/courses')}
+          >
+            Back to Courses
+          </Button>
+        </div>
+      </div>
+    );
+  }
   
   // Calculate next lesson
   const nextLesson = course.modules
@@ -101,7 +77,7 @@ const CourseDetails = () => {
       <div className="glass-card rounded-xl overflow-hidden mb-6">
         <div className="bg-fin-green/10 p-6 flex flex-col items-center text-center relative">
           <div className="w-16 h-16 rounded-xl glass flex items-center justify-center mb-3 shadow-inner-glow animate-pulse-slow">
-            <div className="text-fin-green text-2xl font-bold">₿</div>
+            <div className="text-fin-green text-2xl font-bold">{course.icon}</div>
           </div>
           
           <h2 className="text-xl font-bold mb-2">{course.title}</h2>
@@ -119,11 +95,16 @@ const CourseDetails = () => {
           <div className="flex justify-center gap-4">
             <div className="flex items-center gap-1">
               <Book size={14} className="text-fin-green" />
-              <span className="text-xs">{course.lessons} lessons</span>
+              <span className="text-xs">{totalLessons} lessons</span>
             </div>
             <div className="flex items-center gap-1">
               <Clock size={14} className="text-fin-green" />
-              <span className="text-xs">{course.duration}</span>
+              <span className="text-xs">
+                {course.modules.flatMap(m => m.lessons).reduce((acc, lesson) => {
+                  const [mins, secs] = lesson.duration.split(':').map(Number);
+                  return acc + mins + secs / 60;
+                }, 0).toFixed(0)} mins
+              </span>
             </div>
           </div>
         </div>
@@ -193,6 +174,9 @@ const CourseDetails = () => {
                 <p className="text-xs text-gray-400 mt-1">
                   {module.lessons.length} lessons
                 </p>
+                
+                {/* Module Overview */}
+                {module.overview && <CourseModuleOverview overview={module.overview} />}
               </div>
               <div>
                 {module.lessons.map((lesson) => (
