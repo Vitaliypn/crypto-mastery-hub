@@ -10,7 +10,7 @@ import {
   Share2, 
   BookOpen,
   CheckCircle,
-  LockClosed
+  Lock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -205,7 +205,7 @@ const CourseDetails = () => {
                       {lesson.completed ? (
                         <CheckCircle size={16} className="text-fin-green" />
                       ) : (
-                        <LockClosed size={16} className="text-gray-500" />
+                        <Lock size={16} className="text-gray-500" />
                       )}
                       <span className={`text-sm ${lesson.completed ? 'text-gray-300' : 'text-gray-500'}`}>
                         {lesson.title}
