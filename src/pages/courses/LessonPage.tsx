@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -15,6 +14,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import BackButtonHeader from '@/components/BackButtonHeader';
+import CourseModuleOverview from '@/components/CourseModuleOverview';
 import courseData from '@/data/courseData';
 import { QuizQuestion } from '@/data/courseData';
 
@@ -24,8 +24,8 @@ const LessonPage = () => {
   const [quizMode, setQuizMode] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
-  
-  // Find course and lesson
+  const [videoPlaying, setVideoPlaying] = useState(false);
+
   const course = courseData.find(c => c.id === Number(courseId));
   
   if (!course) {
@@ -41,7 +41,6 @@ const LessonPage = () => {
     );
   }
   
-  // Find the module and lesson
   let currentLesson;
   let currentModule;
   
@@ -67,13 +66,15 @@ const LessonPage = () => {
     );
   }
   
-  // Find next and previous lessons
-  const allLessons = course.modules.flatMap(m => m.lessons);
-  const currentIndex = allLessons.findIndex(l => l.id === Number(lessonId));
-  const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
-  const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+  const getYouTubeVideoId = (url: string | undefined) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
   
-  // Calculate quiz score
+  const videoId = getYouTubeVideoId(currentLesson.content?.videoUrl);
+  
   const calculateScore = () => {
     if (!currentLesson.content?.quiz) return 0;
     
@@ -108,9 +109,12 @@ const LessonPage = () => {
     setSelectedAnswers(newAnswers);
   };
   
+  const handleVideoPlay = () => {
+    setVideoPlaying(true);
+  };
+  
   return (
     <div className="min-h-screen bg-fin-dark text-white px-4 pb-20 pt-4 max-w-lg mx-auto relative overflow-hidden bg-noise">
-      {/* Background gradient effects */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-gradient-radial from-fin-green/20 to-transparent opacity-30 blur-3xl -z-10" />
       
       <BackButtonHeader 
@@ -127,7 +131,6 @@ const LessonPage = () => {
       />
       
       {quizMode ? (
-        // Quiz Mode
         <div className="mb-8 animate-fade-in">
           <div className="glass-card rounded-xl p-6 mb-6">
             <h2 className="text-xl font-bold mb-4 text-center">Lesson Quiz</h2>
@@ -203,9 +206,7 @@ const LessonPage = () => {
           </div>
         </div>
       ) : (
-        // Lesson Mode
         <div className="mb-8">
-          {/* Module Info */}
           <div className="glass-card rounded-xl p-4 mb-6 flex items-center">
             <BookOpen size={18} className="text-fin-green mr-2" />
             <div>
@@ -214,18 +215,42 @@ const LessonPage = () => {
             </div>
           </div>
           
-          {/* Video Player */}
           <div className="glass-card rounded-xl overflow-hidden aspect-video mb-6 relative">
-            <div className="absolute inset-0 flex items-center justify-center bg-fin-green/10">
-              <PlayCircle size={48} className="text-fin-green cursor-pointer hover:scale-110 transition-transform" />
-            </div>
-            <video 
-              poster="https://source.unsplash.com/random/800x450?crypto" 
-              className="w-full h-full object-cover opacity-50"
-            />
+            {videoId ? (
+              videoPlaying ? (
+                <iframe 
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                  title={currentLesson.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <div 
+                  className="absolute inset-0 flex items-center justify-center bg-fin-dark/70 cursor-pointer"
+                  onClick={handleVideoPlay}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-fin-green/20 to-transparent opacity-30" />
+                  <img 
+                    src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                    alt={currentLesson.title}
+                    className="w-full h-full object-cover opacity-60"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-fin-green/90 flex items-center justify-center animate-pulse-slow shadow-glow">
+                      <PlayCircle size={36} className="text-black" />
+                    </div>
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-fin-green/10">
+                <PlayCircle size={48} className="text-fin-green cursor-pointer hover:scale-110 transition-transform" />
+              </div>
+            )}
           </div>
           
-          {/* Lesson Content */}
           <div className="glass-card rounded-xl overflow-hidden mb-6">
             <div className="p-6">
               <h2 className="text-xl font-bold mb-4">{currentLesson.content?.title || currentLesson.title}</h2>
@@ -233,25 +258,8 @@ const LessonPage = () => {
                 {currentLesson.content?.description || "In this lesson, you'll learn about the key concepts related to this topic and how they apply to cryptocurrency."}
               </p>
               
-              {/* Module Overview if available */}
-              {currentModule.overview && (
-                <div className="p-4 bg-fin-green/5 rounded-lg mb-4">
-                  <h3 className="text-sm font-medium flex items-center gap-2 mb-2">
-                    <ListChecks size={16} className="text-fin-green" />
-                    Key Points
-                  </h3>
-                  <ul className="text-xs text-gray-300 space-y-2">
-                    {currentModule.overview.map((point, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="text-fin-green mr-2">•</span>
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {currentModule.overview && <CourseModuleOverview overview={currentModule.overview} />}
               
-              {/* Quiz Button */}
               {currentLesson.content?.quiz && (
                 <Button 
                   className="w-full bg-fin-green/20 hover:bg-fin-green/30 text-fin-green font-medium rounded-xl py-6 transition-all duration-300 mt-2"
@@ -263,7 +271,6 @@ const LessonPage = () => {
             </div>
           </div>
           
-          {/* Navigation Buttons */}
           <div className="flex gap-4">
             {prevLesson ? (
               <Button 

@@ -1,4 +1,3 @@
-
 export interface QuizQuestion {
   question: string;
   options: string[];
@@ -8,6 +7,7 @@ export interface QuizQuestion {
 export interface LessonContent {
   title: string;
   videoTitle?: string;
+  videoUrl?: string;
   description?: string;
   quiz?: QuizQuestion[];
 }
@@ -74,6 +74,7 @@ const courseData: Course[] = [
             completed: true,
             content: {
               title: "What is Cryptocurrency? Explained for Beginners",
+              videoUrl: "https://www.youtube.com/watch?v=41JCpzvnn_0",
               quiz: [
                 {
                   question: "What was the first cryptocurrency?",
@@ -118,6 +119,7 @@ const courseData: Course[] = [
             completed: false,
             content: {
               title: "Blockchain Explained Simply",
+              videoUrl: "https://www.youtube.com/watch?v=SSo_EIwHSd4",
               quiz: [
                 {
                   question: "Blockchain technology is best described as:",
@@ -162,6 +164,7 @@ const courseData: Course[] = [
             completed: false,
             content: {
               title: "Cryptocurrency Wallets Explained",
+              videoUrl: "https://www.youtube.com/watch?v=Aji_E9sw0AE",
               quiz: [
                 {
                   question: "A cold wallet is considered safer than a hot wallet because:",
@@ -216,6 +219,7 @@ const courseData: Course[] = [
             completed: false,
             content: {
               title: "How Does Blockchain Work?",
+              videoUrl: "https://www.youtube.com/watch?v=QG-MTSJIk08",
               quiz: [
                 {
                   question: "Proof-of-Work (PoW) requires miners to:",
@@ -260,6 +264,7 @@ const courseData: Course[] = [
             completed: false,
             content: {
               title: "Smart Contracts Explained (Ethereum Example)",
+              videoUrl: "https://www.youtube.com/watch?v=pYAaPYBdjLQ",
               quiz: [
                 {
                   question: "Smart contracts automatically execute:",
@@ -314,6 +319,7 @@ const courseData: Course[] = [
             completed: false,
             content: {
               title: "How to Buy Bitcoin and Cryptocurrencies Safely",
+              videoUrl: "https://www.youtube.com/watch?v=Ej74RGR-7Fw",
               quiz: [
                 {
                   question: "The safest places to buy crypto are usually:",
@@ -352,6 +358,7 @@ const courseData: Course[] = [
             completed: false,
             content: {
               title: "Cryptocurrency Trading for Beginners",
+              videoUrl: "https://www.youtube.com/watch?v=9xxb1Bh0Hng",
               quiz: [
                 {
                   question: "Dollar-cost averaging means:",
@@ -406,6 +413,7 @@ const courseData: Course[] = [
             completed: false,
             content: {
               title: "Crypto Terms You Need to Know",
+              videoUrl: "https://www.youtube.com/watch?v=l5GEF0Tnsd4",
               quiz: [
                 {
                   question: "\"HODL\" originally meant:",
