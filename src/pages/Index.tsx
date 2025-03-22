@@ -1,11 +1,16 @@
 
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Star, User } from 'lucide-react';
 import AnimatedLink from '@/components/AnimatedLink';
+import Logo from '@/components/Logo';
+import ProfileAvatar from '@/components/ProfileAvatar';
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   // Refs for animation elements
   const heroRef = useRef<HTMLDivElement>(null);
   const coursesRef = useRef<HTMLDivElement>(null);
@@ -56,15 +61,8 @@ const Index = () => {
       
       {/* Top Navigation */}
       <div className="flex justify-between items-center mb-8 animate-fade-in">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-fin-green flex items-center justify-center shadow-glow">
-            <span className="font-bold text-black text-sm">F</span>
-          </div>
-          <h1 className="text-xl font-bold tracking-tight">FinMastery</h1>
-        </div>
-        <div className="h-10 w-10 glass-card rounded-full flex items-center justify-center shadow-md transition-all hover:shadow-glow">
-          <User size={18} className="text-fin-green" />
-        </div>
+        <Logo />
+        <ProfileAvatar to="/login" />
       </div>
 
       {/* Hero Section */}
@@ -76,7 +74,10 @@ const Index = () => {
         <p className="mb-6 text-sm text-gray-400 max-w-xs mx-auto">
           Master cryptocurrency trading with our beginner-friendly courses
         </p>
-        <Button className="bg-fin-green hover:bg-fin-green-dark text-black font-medium rounded-xl px-6 py-6 shadow-glow transition-all duration-300 group button-hover-effect">
+        <Button 
+          className="bg-fin-green hover:bg-fin-green-dark text-black font-medium rounded-xl px-6 py-6 shadow-glow transition-all duration-300 group button-hover-effect"
+          onClick={() => navigate('/signup')}
+        >
           Get Started
           <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
         </Button>
@@ -86,11 +87,19 @@ const Index = () => {
       <div ref={coursesRef} className="mb-12 opacity-0">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Featured Courses</h3>
-          <span className="text-fin-green text-sm cursor-pointer hover:underline">View all</span>
+          <span 
+            className="text-fin-green text-sm cursor-pointer hover:underline"
+            onClick={() => navigate('/courses')}
+          >
+            View all
+          </span>
         </div>
         
         <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-fin-green/20">
-          <Card className="min-w-[200px] glass-card rounded-xl border-0">
+          <Card 
+            className="min-w-[200px] glass-card rounded-xl border-0 cursor-pointer"
+            onClick={() => navigate('/courses/1')}
+          >
             <CardContent className="p-5">
               <div className="w-12 h-12 rounded-lg glass flex items-center justify-center mb-4 shadow-inner-glow animate-pulse-slow">
                 <div className="text-fin-green text-xl font-bold">₿</div>
@@ -117,7 +126,10 @@ const Index = () => {
             </CardContent>
           </Card>
           
-          <Card className="min-w-[200px] glass-card rounded-xl border-0">
+          <Card 
+            className="min-w-[200px] glass-card rounded-xl border-0 cursor-pointer"
+            onClick={() => navigate('/courses/2')}
+          >
             <CardContent className="p-5">
               <div className="w-12 h-12 rounded-lg glass flex items-center justify-center mb-4 shadow-inner-glow animate-pulse-slow">
                 <div className="text-fin-green text-xl font-bold">
@@ -149,7 +161,10 @@ const Index = () => {
             </CardContent>
           </Card>
           
-          <Card className="min-w-[200px] glass-card rounded-xl border-0">
+          <Card 
+            className="min-w-[200px] glass-card rounded-xl border-0 cursor-pointer"
+            onClick={() => navigate('/courses/3')}
+          >
             <CardContent className="p-5">
               <div className="w-12 h-12 rounded-lg glass flex items-center justify-center mb-4 shadow-inner-glow animate-pulse-slow">
                 <div className="text-fin-green text-xl font-bold">
@@ -184,7 +199,11 @@ const Index = () => {
 
       {/* Quick Access Buttons */}
       <div ref={buttonsRef} className="flex flex-col gap-3 mb-12 opacity-0">
-        <Button variant="outline" className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50">
+        <Button 
+          variant="outline" 
+          className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50"
+          onClick={() => navigate('/courses')}
+        >
           <div className="flex flex-col items-start">
             <span className="text-white font-medium">Explore Courses</span>
             <span className="text-xs text-gray-400">Browse all available courses</span>
@@ -192,7 +211,11 @@ const Index = () => {
           <ArrowRight size={16} className="text-fin-green group-hover:translate-x-1 transition-transform" />
         </Button>
         
-        <Button variant="outline" className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50">
+        <Button 
+          variant="outline" 
+          className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50"
+          onClick={() => navigate('/simulator')}
+        >
           <div className="flex flex-col items-start">
             <span className="text-white font-medium">Virtual Trading Simulator</span>
             <span className="text-xs text-gray-400">Practice trading with virtual money</span>
@@ -204,7 +227,11 @@ const Index = () => {
           </div>
         </Button>
         
-        <Button variant="outline" className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50">
+        <Button 
+          variant="outline" 
+          className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50"
+          onClick={() => navigate('/resources')}
+        >
           <div className="flex flex-col items-start">
             <span className="text-white font-medium">Crypto Glossary</span>
             <span className="text-xs text-gray-400">Detailed terms and definitions</span>
@@ -323,7 +350,12 @@ const Index = () => {
                   <p className="text-[10px] text-gray-400">3 badges earned</p>
                 </div>
               </div>
-              <Button size="sm" variant="outline" className="h-8 px-3 rounded-lg text-xs border-gray-700 hover:bg-fin-green hover:text-black hover:border-fin-green transition-colors">
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="h-8 px-3 rounded-lg text-xs border-gray-700 hover:bg-fin-green hover:text-black hover:border-fin-green transition-colors"
+                onClick={() => navigate('/profile')}
+              >
                 View All
               </Button>
             </div>
@@ -335,7 +367,10 @@ const Index = () => {
       <div ref={communityRef} className="text-center mb-12 opacity-0">
         <h3 className="mb-3 text-lg font-semibold">Join Our Community</h3>
         <p className="text-sm text-gray-400 mb-4 max-w-xs mx-auto">Connect with fellow traders and learn together</p>
-        <Button className="bg-fin-green/10 hover:bg-fin-green hover:text-black text-fin-green rounded-xl px-6 py-5 shadow transition-all duration-300 button-hover-effect">
+        <Button 
+          className="bg-fin-green/10 hover:bg-fin-green hover:text-black text-fin-green rounded-xl px-6 py-5 shadow transition-all duration-300 button-hover-effect"
+          onClick={() => navigate('/community')}
+        >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
             <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -362,7 +397,11 @@ const Index = () => {
 
       {/* FAQs & Support */}
       <div ref={faqRef} className="flex flex-col gap-3 mb-8 opacity-0">
-        <Button variant="outline" className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50">
+        <Button 
+          variant="outline" 
+          className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50"
+          onClick={() => navigate('/resources')}
+        >
           <div className="flex flex-col items-start">
             <span className="text-white font-medium">Frequently Asked Questions</span>
             <span className="text-xs text-gray-400">Get answers to common questions</span>
@@ -370,7 +409,11 @@ const Index = () => {
           <ArrowRight size={16} className="text-fin-green group-hover:translate-x-1 transition-transform" />
         </Button>
         
-        <Button variant="outline" className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50">
+        <Button 
+          variant="outline" 
+          className="glass-card rounded-xl justify-between text-left font-normal h-auto py-4 group transition-all hover:border-fin-green/30 border-gray-800/50"
+          onClick={() => navigate('/about')}
+        >
           <div className="flex flex-col items-start">
             <span className="text-white font-medium">Contact Support</span>
             <span className="text-xs text-gray-400">We're here to help you</span>
@@ -381,9 +424,9 @@ const Index = () => {
 
       {/* Footer */}
       <div className="flex justify-around text-xs text-gray-500 mt-16 pt-4 border-t border-gray-800/50 animate-fade-in">
-        <AnimatedLink href="#" className="hover:text-gray-300">About</AnimatedLink>
-        <AnimatedLink href="#" className="hover:text-gray-300">Privacy</AnimatedLink>
-        <AnimatedLink href="#" className="hover:text-gray-300">Terms</AnimatedLink>
+        <AnimatedLink href="/about" className="hover:text-gray-300">About</AnimatedLink>
+        <AnimatedLink href="/about" className="hover:text-gray-300">Privacy</AnimatedLink>
+        <AnimatedLink href="/about" className="hover:text-gray-300">Terms</AnimatedLink>
       </div>
     </div>
   );
