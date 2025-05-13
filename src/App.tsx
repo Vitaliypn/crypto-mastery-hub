@@ -18,6 +18,7 @@ import Community from "./pages/Community";
 import Resources from "./pages/Resources";
 import UserProfile from "./pages/UserProfile";
 import About from "./pages/About";
+import QuizFunnel from "./pages/QuizFunnel";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/resources" element={<Resources />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
+          <Route path="/quiz" element={<QuizFunnel />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
