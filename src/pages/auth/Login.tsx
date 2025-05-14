@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Mail, Lock, Github } from 'lucide-react';
@@ -100,7 +101,7 @@ const Login = () => {
           <div className="grid grid-cols-2 gap-3 mb-6">
             <Button variant="outline" className="glass-card rounded-xl border-gray-700 hover:border-gray-500">
               <Mail size={18} className="mr-2" />
-              Email
+              Google
             </Button>
             <Button variant="outline" className="glass-card rounded-xl border-gray-700 hover:border-gray-500">
               <Github size={18} className="mr-2" />
